@@ -70,5 +70,5 @@ Region definitions, and all base spatial transformations, are in lat/lon space i
 Fetch
 =====
 
-The fetch sub-module is used 
+See example notebook.
 
