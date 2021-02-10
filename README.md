@@ -51,7 +51,9 @@ Acquisition objects have some parameters and constraints. The data within each `
 
 Besides uniformity in spatial reference, data `acquisition` objects are expected to contain housekeeping data that allows for integrated error propagation and provenance tracking. Attributes within the layer should have units, and either uncertainty per observation or observation method. Granule information (i.e., which data products, which granule ids) are also abstracted into this object class.
 
-The `aquisition` objects are broadly speaking a subclass of the xarray object. They share the `region` of the `GeoFrame` that they are associated with; however, they can also have several 'masks' that modify there behavior and representation in the larger object collection. As mentioned, these arrays are time indexed; properly speaking, they have two time attributes, an acquisition time range, and a conical midpoint index. The time range is the actual observation range of the first vs last observation; however, time ranges may overlap for multiple sensors (or a single sensor with multiple products at different resolutions), so a single integer timestamp is additionally used for actually ordering data within the `GeoFrame` object data stack.
+The `aquisition` objects are broadly speaking a subclass of the xarray object. They share the `region` of the `GeoFrame` that they are associated with; however, they can also have several 'masks' that modify there behavior and representation in the larger object collection. As mentioned, these arrays are time indexed; properly speaking, they have two time attributes, an acquisition time range, and a canonical midpoint index. The time range is the actual observation range of the first vs last observation; however, time ranges may overlap for multiple sensors (or a single sensor with multiple products at different resolutions), so a single integer timestamp is additionally used for actually ordering data within the `GeoFrame` object data stack.
+
+![Masking](./masking.png)
 
 GeoFrame Objects
 ----------------
