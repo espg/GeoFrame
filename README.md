@@ -24,22 +24,26 @@ GeoFrame Module
 
 The `GeoFrame` is the top level object. It's design is follows from observation of how Earth Science analysis is conducted: at the beginning of each project or analysis, a study area, study domain, or region of interest is defined. This analysis unit could be a water shed or drainage basin, a geographic or political boundary, a bounding box in some projection space, or the intersection of some set of data sources (either inclusive or exclusive). In terms of defining the `region` object, the input could by a polygon, bounding box, or grid definition. The design philosophy of the `GeoFrame` is that these analysis units can be both sub and super set to create objects of the same type. Greenland drainage basins are a good example; analysis may take place at the basin level, and then be aggregated as the full region for plotting the result. Alternatively, a basin region may be subset to a bounding box. This latter case is the preferred way to 'zoom in' when producing plots-- a subset of a `GeoFrame` is also a `GeoFrame` with a different region definition that sets the plotting defaults.
 
-
 ![Basin Region](./inset_old.png)
+
+*Example of a GeoFrame region definition (yellow) with two acquisitions (green and blue). Note that acquisitions extend beyond the region; the GeoFrame object would mask the data outside of the region. Subsetting the GeoFrame south of the green acquisition would result in the new GeoFrame not including that data at all*
 
 Acquisitions (Scenes)
 ---------------------
 
-The fundamental building block of a pandas dataframe is the `series` object; all pandas dataframes are a collection of `series`. Similarly, all `GeoFrame` objects are a collection of `aquisitions`. The `aquisition` objects could also be referred to as 'scenes' (which is shorter) or 'collections'; however, 'scenes' are generally thought of as analogous to data 'granules', and 'collection' gets quickly overloaded as both a noun and an adjective, so 'acquisition' is used to be unambiguous. That said, `aquisitions` are best understood by analogy to data 'granules'. 
+The fundamental building block of a pandas dataframe is the `series` object; all pandas dataframes are a collection of `series`. Similarly, all `GeoFrame` objects are a collection of `acquisitions`. The `aquisition` objects could also be referred to as 'scenes' (which is shorter) or 'collections'; however, 'scenes' are generally thought of as analogous to data 'granules', and 'collection' gets quickly overloaded as both a noun and an adjective, so 'acquisition' is used to be unambiguous. That said, `aquisitions` are best understood by analogy to data 'granules'. 
 
 A data 'granule' is the distribution unit of a satellite product. For MODIS/VIIRS it is a 5 or 6 minute 'chunk' of data; for ICESat (both the original and the follow on mission), a granule is defined as either a fixed number of observations, or a fixed acquisition time. For Landsat, a granule is a fixed size data array, always pinned to a repeat track pattern.
 
-example of granule boundaries.
+![ICESat Acquisitions](./acquisitions.png)
+
+*Example of 8 ICESat acquisitions. Each acquisition could be part of a single ICESat source file granule, or several that have been merged. Note: February 28th is two separate acquisitions because there is temporal gap between the data in the East and West of the GeoFrame.*
 
 These data granule chunks are, for modern satellites, completely arbitrary. The sensors themselves simply acquire data continuously, and the stream is divided as a convenience for processing and distribution. A study area (region), may contain only part of a data granule, or may span over several granules, depending on the region size and the sensor. An `acquisition` is just a contiguous subset or superset of data granules, merged or subset appropriately. 'Contiguous' here means contiguous in time, which also implies contiguous in space along the orbital path. Thus, a `GeoFrame` is a collection of `aquisitions` which are time-indexed. When working with GeoFrames to derive new attributes (interpolation, merging, etc), new data layers are effectively 'synthetic' acquisitions. 
 
+![Synthetic Acquisition](./synthetic_acquisition.png)
 
-example of icesat tracks
+*Example of a merged data layer, now as a single 'synthetic' acquisition (Spring Elevations).*
 
 The acquisition definition and ordering enforcement is primarily done to facilitate data fusion and masking. Let's same that you have some ICESat (or ICESat-2) tracks that you are working with, and you want to bring in additional data for filtering or fusion. The ICESat tracks may have been collected over several weeks in order to fully cover you region and study area; let's say that you'd like to pull in thermal or cloud data coincident with that data. To do this, you'll be getting MODIS data that is either closest in time, or data that brackets the ICESat observations in time both before and after the data collection. Calling `fetch` for cloud data on the full GeoFrame of ICESat data would then run the fetch per acquisition of ICESat data within the `GeoFrame` object. Doing the same call for thermal data from NCEP weather modules would do the same-- fetch the NCEP data per day/time of each overpass acquisition within the container object.
 
