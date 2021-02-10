@@ -24,7 +24,8 @@ GeoFrame Module
 
 The `GeoFrame` is the top level object. It's design is follows from observation of how Earth Science analysis is conducted: at the beginning of each project or analysis, a study area, study domain, or region of interest is defined. This analysis unit could be a water shed or drainage basin, a geographic or political boundary, a bounding box in some projection space, or the intersection of some set of data sources (either inclusive or exclusive). In terms of defining the `region` object, the input could by a polygon, bounding box, or grid definition. The design philosophy of the `GeoFrame` is that these analysis units can be both sub and super set to create objects of the same type. Greenland drainage basins are a good example; analysis may take place at the basin level, and then be aggregated as the full region for plotting the result. Alternatively, a basin region may be subset to a bounding box. This latter case is the preferred way to 'zoom in' when producing plots-- a subset of a `GeoFrame` is also a `GeoFrame` with a different region definition that sets the plotting defaults.
 
-Example images of regions
+
+![Basin Region](./inset_old.png)
 
 Acquisitions (Scenes)
 ---------------------
